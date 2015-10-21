@@ -1,0 +1,4 @@
+vwumount() {
+  local local_path=/home/ksmart/Perforce/BlueSocket/wifi/$1
+  sudo umount $local_path
+}

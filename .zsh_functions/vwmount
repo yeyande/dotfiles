@@ -1,0 +1,6 @@
+vwmount () {
+  local remote_point=//ksmart-vwlan-$1/p4vm
+  local local_point=/home/ksmart/Perforce/BlueSocket/wifi/$1
+  local mount_opts=rw,credentials=/root/.vwlanmounts
+  sudo mount -t cifs $remote_point $local_point -o $mount_opts
+}
