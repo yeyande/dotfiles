@@ -1,0 +1,17 @@
+#!/bin/sh
+FONT1="-*-terminus-bold-*-*-*-12-*-*-*-*-*-*-*"
+FONT2="-*-stlarch-medium-r-*-*-10-*-*-*-*-*-*-*"
+
+
+getXresColor() {
+    echo -n "$( xrdb -query |grep "\*.$1:" | grep -oE "#[a-zA-Z0-9]{6}" |cut -c 2- )"
+}
+
+FOREGROUND_COLOR="#1d1f21"
+MAGENTA_COLOR="#FF$(getXresColor color5)"
+DARK_GRAY="#202020"
+LIGHT_GRAY="#555555"
+#LIGHT_BLUE="#3366FF"
+LIGHT_BLUE="#66AABB"
+#LIGHT_BLUE="#6D878D"
+YELLOW="#FFFF00"

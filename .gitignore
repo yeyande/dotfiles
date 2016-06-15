@@ -1,0 +1,8 @@
+.config/gconf/
+.config/google-chrome/
+.config/gtk-*
+.config/libreoffice
+.config/qBittorrent
+.config/vlc
+.config/wireshark
+.config/VirtualBox

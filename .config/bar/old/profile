@@ -1,0 +1,13 @@
+#settings to be used in bar files.
+PANEL_FIFO=/tmp/panel-fifo
+
+BG="#181818"
+FG="#b8b8b8"
+BLACK="#181818"
+RED="#ab4642"
+GREEN="#a1b56c"
+YELLOW="#f7ca88"
+BLUE="#7cafc2"
+MAGENTA="#ba8baf"
+CYAN="#86c1b9"
+WHITE="#b8b8b8"

@@ -1,0 +1,72 @@
+#! /bin/bash
+
+cd $(dirname $0)
+source  $(dirname $0)/profile
+FONT_FAM="-*-proggycleantt-*-*-*-*-*-*-*-*-*-*-iso10646-1"
+#"-*-fontawesome-*-*-*-*-*-*-*-*-*-*-*-*"
+
+if [ $(pgrep -cx panel) -gt 1 ] ; then
+  printf "%s\n" "The panel is already running."
+  while [[ $(pgrep -c "panel") != 0 ]]
+  do
+    pkill -n -9 "panel"
+  done
+fi
+
+trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
+
+[ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
+mkfifo "$PANEL_FIFO"
+
+music() {
+  if [ -n "`mpc | grep "playing"`" ]; then 
+      echo -n "%{B$BG}%{F$MAGENTA}%{A:bspc rule -a URxvt -o floating=on; \urxvt -e ncmpcpp &:} $(mpc current) %{B-}%{F-}%{A} "    
+    # if nothing is playing, display 'paused'
+  else
+    echo -n "%{B$BG}%{F$MAGENTA}%{A:bspc rule -a URxvt -o floating=on; \urxvt -e ncmpcpp &:} Paused %{B-}%{F-}%{A} "    
+
+  fi
+}
+
+clock() {
+	DATE=$(date "+%a %d %b")
+   	TIME=$(date "+%T")	
+#  echo " %{F$GREEN}$(printf '%b' "\ue016")%{F-}$DATE $TIME"
+  echo " %{F-}$DATE $TIME"
+
+}
+
+title() {
+	STR=$(xtitle -f '%s') 
+  echo "%{B$BG}%{F$FG} $STR %{B-}%{F-}"
+}
+
+wifi_ssid(){
+	# WIFI ICONS
+	# 
+
+#NAME=$(iwconfig wlp3s0 | grep 'ESSID:' | awk '{print $4}' | sed 's/ESSID://g' | sed 's/"//g')
+NAME=$(iw dev wlp0s19f2u3 link| grep SSID |cut -d: -f 2 | sed -e "s/ //")  
+ 
+echo " %{F$GREEN}%{A:bspc rule -a URxvt -o floating=on; \urxvt -e nmtui &:}%{F-}$NAME%{A}"
+   
+}
+
+conky -c ~/.config/bar/conkyrc > "$PANEL_FIFO" &
+bspc control --subscribe > "$PANEL_FIFO" &
+while true ; do
+	echo "S""$(wifi_ssid)  $(clock) "> "$PANEL_FIFO" &
+    sleep 1
+done &
+while true ; do
+	echo "M"$(music)> "$PANEL_FIFO" &
+    sleep 1
+done &
+
+
+FONT_FAMILY='DejaVu Sans'
+#cat $PANEL_FIFO | ~/.config/bar/panel_bar | lemonbar -g 1600x16 -u 10 -B $BG -F $FG -f "ProggyCleanTT:12","Stlarch" | sh &
+cat $PANEL_FIFO | ~/.config/bar/panel_bar | lemonbar -g 1600x16 -u 10 -B $BG -F $FG -f $FONT_FAM | sh &
+
+
+wait

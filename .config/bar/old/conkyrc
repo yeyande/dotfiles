@@ -1,0 +1,78 @@
+# conky settings
+background no
+update_interval 0.5
+cpu_avg_samples 5
+total_run_times 0
+override_utf8_locale yes
+short_units yes
+pad_percents 2
+top_name_width 9
+uppercase no
+out_to_console yes
+out_to_x no
+
+TEXT
+C\
+#${if_match "${exec cat /proc/acpi/bbswitch | cut -d ' ' -f 2}" == "ON"}\
+#	%{F\#ab4642}${exec echo -e '\ue082'}%{F-}\
+#${else}\
+	%{F\#585858}${exec echo -e '\ue082'}%{F-}\
+#${endif}\
+${exec sensors | grep "Physical" | cut -d " " -f 5 | cut -c 2-3}°C\
+\
+\
+\
+   \
+%{A:bspc rule -a URxvt -o floating=on; \urxvt -e htop &:}\
+%{A3:mate-system-monitor&:}\
+	${if_match ${cpu cpu0} >= 50}\
+		%{F\#ab4642}${exec echo -e '\ue0a1'}%{F-}${cpu cpu0}%\
+	${else}\
+		${if_match ${cpu cpu0} < 20}\
+			${if_match ${cpu cpu0} < 10}\
+				%{F\#a1b56c}${exec echo -e '\ue0a1'}%{F-}0${cpu cpu0}%\
+			${else}\
+			%{F\#a1b56c}${exec echo -e '\ue0a1'}%{F-}${cpu cpu0}%\
+			${endif}\
+		${else}\
+			%{F\#f7ca88}${exec echo -e '\ue0a1'}%{F-}${cpu cpu0}%\
+		${endif}\
+	${endif}\
+%{A}%{A}\
+\
+\
+\
+   \
+${if_match ${memperc} >= 50}\
+	%{F\#ab4642}${exec echo -e '\ue028'}%{F-}${mem}\
+${else}\
+	%{F\#a1b56c}${exec echo -e '\ue028'}%{F-}${mem}\
+${endif}\
+\
+\
+\
+   \
+#%{A:xfce4-power-manager-settings&:}\
+#	${if_match ${battery_percent} >= 70}\
+#		%{F\#a1b56c}${exec echo -e '\ue116'}%{F-}${battery_percent}%\
+#	${else}\
+#		${if_match ${battery_percent} <= 20}\
+#			%{F\#ab4642}${exec echo -e '\ue114'}%{F-}${battery_percent}%\
+#		${else}\
+#			%{F\#f7ca88}${exec echo -e '\ue115'}%{F-}${battery_percent}%\
+#		${endif}\
+#	${endif}\
+%{A}\
+\
+\
+\
+   \
+%{A:pavucontrol &:}%{A4:amixer set Master 2%+:}%{A5:amixer set Master 2%-:}\
+	${if_match "${exec amixer get Master | grep "Front Left:" | cut -d " " -f8}" == "[on]"}\
+		%{F\#a1b56c}%{F-}\
+	${else}\
+		%{F\#a1b56c}%{F-}\
+	${endif}\
+	${exec amixer get Master | grep "Front Left:" | cut -d " " -f7 | cut -c 2-4}\
+%{A}%{A}%{A}
+

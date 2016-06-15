@@ -1,12 +1,16 @@
-syntax on
-set background=dark
-set shiftwidth=4 tabstop=4 expandtab
-execute pathogen#infect()
+syntax enable
+set shiftwidth=4 softtabstop=4 tabstop=4 expandtab
+set laststatus=2
+set number
+set hidden
+set tags=./tags;,tags;$HOME
+set clipboard=unnamed
 
-map <F5> <Esc>:EnableFastPHPFolds<Cr>
-map <F6> <Esc>:EnablePHPFolds<Cr>
-map <F7> <Esc>:EnablePHPFolds<Cr>
-map <C-n> <Esc>:tab sp<Cr>
+map <C-n> <Esc>:tabe<Cr>
 
-autocmd Filetype html setlocal tabstop=2 shiftwidth=4 expandtab
-autocmd Filetype javascript setlocal tabstop=2 shiftwidth=4 expandtab
+autocmd Filetype html setlocal shiftwidth=2 softtabstop=2
+autocmd Filetype javascript setlocal shiftwidth=2 softtabstop=2
+autocmd Filetype ruby setlocal shiftwidth=2 softtabstop=2
+autocmd Filetype eruby setlocal shiftwidth=2 softtabstop=2
+
+autocmd FileType make setlocal noexpandtab shiftwidth=8 tabstop=8 softtabstop=0
